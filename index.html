@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoBio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- Favicon and Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon_io/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon_io/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon_io/favicon-16x16.png">
+    <link rel="manifest" href="favicon_io/site.webmanifest">
+    <link rel="mask-icon" href="favicon_io/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .video-background {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            z-index: -1;
+        }
+        .profile {
+            background: rgba(255, 255, 255, 0.1); /* Fondo transparente */
+            border-left: 2px solid rgba(255, 0, 0, 0.5); /* Borde rojo en los lados */
+            border-right: 2px solid rgba(255, 0, 0, 0.5); /* Borde rojo en los lados */
+            backdrop-filter: blur(10px); /* Efecto de difuminado */
+            padding: 30px;
+            border-radius: 15px;
+            width: 450px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.8); /* Efecto LED en los bordes */
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            transition: box-shadow 0.2s; /* Solo animación de sombra */
+        }
+        .profile img {
+            border-radius: 50%;
+            width: 120px;
+            margin-top: -60px;
+            border: 5px solid rgba(255, 255, 255, 0.8);
+        }
+        .profile h1 {
+            margin-top: 10px;
+            font-size: 24px;
+            color: #ffffff;
+        }
+        .profile p {
+            font-size: 14px;
+            color: #dddddd;
+        }
+        .discord-link a {
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 10px;
+            background: #7289da;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background 0.3s ease;
+        }
+        .discord-link a:hover {
+            background: #5b6eae;
+        }
+        .social-media {
+            margin-top: 20px;
+        }
+        .social-media a {
+            color: white;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: color 0.3s;
+        }
+        .social-media a:hover {
+            color: #ff6347;
+        }
+        .visit-counter {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        .visit-counter i {
+            margin-right: 5px;
+        }
+        .mute-button {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .mute-button:hover {
+            background: rgba(0, 0, 0, 0.7);
+        }
+    </style>
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
+<body>
+    <video autoplay muted loop class="video-background">
+        <source src="Y2meta.app-Sakura Tree Moon-(1080p60).mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div class="profile">
+        <img src="https://i.pinimg.com/originals/c5/bf/9b/c5bf9b4801ee89b2c9d56924a9357217.gif" alt="Profile Picture">
+        <h1>InFoSos</h1>
+        <p>just infosos ye</p>
+        <div class="discord-link">
+            <a href="https://discord.gg/B9fdhzpAcz"><i class="fab fa-discord"></i> Join Server</a>
+        </div>
+        <div class="social-media">
+            <a href="https://x.com/iiTzInFosos" target="_blank"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.facebook.com/jose.wtn/" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://t.me/InFos0s" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+    </div>
+    <div class="visit-counter">
+        <i class="fas fa-eye"></i>
+        <span id="visitCount">Visits: 0</span>
+    </div>
+    <button class="mute-button" id="muteButton">
+        <i class="fas fa-volume-mute"></i>
+    </button>
+    <audio id="bg-music" loop>
+        <source src="Por%20un%20Segundo.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+    <!-- Contador de Visitas -->
+    <script>
+        if (localStorage.pagecount) {
+            localStorage.pagecount = Number(localStorage.pagecount) + 1;
+        } else {
+            localStorage.pagecount = 1;
+        }
+        document.getElementById('visitCount').textContent = localStorage.pagecount;
+
+        // Mute/Unmute button functionality
+        const bgMusic = document.getElementById('bg-music');
+        const muteButton = document.getElementById('muteButton');
+        muteButton.addEventListener('click', () => {
+            if (bgMusic.muted) {
+                bgMusic.muted = false;
+                bgMusic.currentTime = 0; // Reiniciar la música
+                bgMusic.play();
+                muteButton.innerHTML = '<i class="fas fa-volume-up"></i>';
+            } else {
+                bgMusic.muted = true;
+                bgMusic.currentTime = 0; // Reiniciar la música
+                bgMusic.pause();
+                muteButton.innerHTML = '<i class="fas fa-volume-mute"></i>';
+            }
+        });
+    </script>
+</body>
+</html>
